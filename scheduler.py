@@ -3,6 +3,7 @@ import logging
 import os
 import platform
 import time
+import cryptography
 from logging.handlers import RotatingFileHandler
 
 import pika

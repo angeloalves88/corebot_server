@@ -6,7 +6,7 @@ class Config:
     TENANT_NAME = 'DAFE-DEMO'
     CUSTOMER_KEY = ""
 
-    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://adminmysql:sQHJFQ3hBzA44O13cQoE_@easypanel.promotionsgroup.website:33066/corebotpy_demo"
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://adminmysql:sQHJFQ3hBzA44O13cQoE_@easypanel.promotionsgroup.website/corebotpy_demo"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     SECRET_KEY = os.urandom(24)
