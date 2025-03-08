@@ -1,6 +1,7 @@
 import datetime
 import logging
 import os
+import platform
 import time
 from logging.handlers import RotatingFileHandler
 
@@ -11,15 +12,39 @@ from application import db, create_app
 from application.models import Schedule, Machine, Bot, Task
 from config import Config
 
+def get_log_directory():
+    """Retorna o diretório de log apropriado para o sistema operacional."""
+
+    system = platform.system()
+
+    if system == 'Windows':
+        # No Windows, usamos a variável de ambiente LOCALAPPDATA
+        log_dir = os.path.join(os.getenv('LOCALAPPDATA'), 'COREBOT-PY')
+    elif system == 'Linux':
+        # No Linux, usamos a variável de ambiente XDG_CONFIG_HOME ou HOME
+        xdg_config_home = os.getenv('XDG_CONFIG_HOME')
+        if xdg_config_home:
+            log_dir = os.path.join(xdg_config_home, 'COREBOT-PY')
+        else:
+            log_dir = os.path.join(os.getenv('HOME'), '.config', 'COREBOT-PY')
+    else:
+        # Para outros sistemas operacionais, use o diretório home do usuário
+        log_dir = os.path.join(os.getenv('HOME'), 'COREBOT-PY')
+
+    # Cria o diretório se ele não existir
+    os.makedirs(log_dir, exist_ok=True)
+
+    return log_dir
+
 # Obtém o diretório do LocalAppData
-local_appdata = os.getenv('LOCALAPPDATA')
-log_dir = os.path.join(local_appdata, 'COREBOT-PY')
+log_directory = get_log_directory()
+log_dir = os.path.join(log_directory, 'COREBOT-PY')
 
 # Cria o diretório se não existir
 os.makedirs(log_dir, exist_ok=True)
 
 # Define o caminho completo para o arquivo de log
-log_file = os.path.join(log_dir, f'dafe_scheduler_T{Config.TENANT_ID}.txt')
+log_file = os.path.join(log_dir, f'corebotpy_scheduler.txt')
 
 # Configura o logger com RotatingFileHandler
 handler = RotatingFileHandler(log_file, maxBytes=5 * 1024 * 1024, backupCount=7)
